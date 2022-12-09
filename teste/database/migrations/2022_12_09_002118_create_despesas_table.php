@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('despesas', function (Blueprint $table) {
             $table->id();
+            $table->date('data');
             $table->string('descricao', 192);
             $table->foreignId('user_id')->constrained('users');
             $table->float('valor', 12 , 2);
