@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Mail\DespesaCriada;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,6 +27,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::get('/email', function () {
+    return new DespesaCriada(
+        '2022-12-10',
+        25.52,
+        'Táxi'
+    );
 });
 
 require __DIR__.'/auth.php';
