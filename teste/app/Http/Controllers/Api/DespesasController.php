@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\DespesaCriada as EventsDespesaCriada;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DespesasFormRequest;
+use App\Mail\DespesaCriada;
 use App\Models\Despesa;
 use App\Models\User;
 use App\Repositories\DespesasRepository;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class DespesasController extends Controller
 {
@@ -25,6 +29,16 @@ class DespesasController extends Controller
     {
         # code...
         $request->user_id = Auth::id();
+
+        $despesaCriadaEvent = new \App\Events\DespesaCriada(
+            $request->data,
+            $request->valor,
+            $request->descricao,
+            $request->user()
+        );
+
+        event($despesaCriadaEvent);
+
         return response()->json($this->despesasRepository->add($request), 201);
     }
     public function show(int $despesas)
