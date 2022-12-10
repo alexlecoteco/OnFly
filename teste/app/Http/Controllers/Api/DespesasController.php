@@ -22,6 +22,7 @@ class DespesasController extends Controller
     public function store(DespesasFormRequest $request)
     {
         # code...
+        $request->user_id = Auth::id();
         return response()->json($this->despesasRepository->add($request), 201);
     }
     public function show(int $despesas)

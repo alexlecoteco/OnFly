@@ -24,7 +24,7 @@ class DespesasFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => ['required','exists:users,id'],
+            'user_id' => ['exists:users,id'],
             'data' => ['required', 'date', 'before_or_equal:today'],
             'valor' => ['required','numeric','gt:0'],
             'descricao' => ['required','max:191']
