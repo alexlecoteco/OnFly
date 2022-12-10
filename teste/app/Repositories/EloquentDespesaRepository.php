@@ -14,6 +14,7 @@ class EloquentDespesaRepository implements DespesasRepository
         return DB::transaction(function () use ($request) {
             $despesa = Despesa::create([
                 'user_id' => $request->user_id,
+                'data' => $request->data,
                 'valor' => $request->valor,
                 'descricao' => $request->descricao,
             ]);
