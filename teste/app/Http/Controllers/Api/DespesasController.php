@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\DespesasFormRequest;
 use App\Models\Despesa;
+use App\Models\User;
 use App\Repositories\DespesasRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DespesasController extends Controller
 {
@@ -17,7 +19,7 @@ class DespesasController extends Controller
     public function index(Request $request)
     {
         $despesas = Despesa::query();
-        return $despesas->paginate();
+        return $despesas->where('user_id', Auth::id())->paginate();
     }
     public function store(DespesasFormRequest $request)
     {
@@ -29,11 +31,18 @@ class DespesasController extends Controller
     {
         # code...
         $despesasModel = Despesa::find($despesas);
+
+        $this->authorize('view', $despesasModel);
+
         return $despesasModel;
     }
     public function update(Despesa $despesa, Request $request)
     {
         # code...
+        $despesaModel = Despesa::find($despesa);
+
+        $this->authorize('update', $despesaModel);
+
         $despesa->fill($request->all());
         $despesa->save();
 
@@ -42,6 +51,10 @@ class DespesasController extends Controller
     public function destroy(int $despesa)
     {
         # code...
+        $despesaModel = Despesa::find($despesa);
+
+        $this->authorize('delete', $despesaModel);
+
         Despesa::destroy($despesa);
         return response()->noContent();
     }
