@@ -10,6 +10,10 @@ Para iniciar o projeto é preciso iniciar a aplicação com `php artisan serve` 
 
 Para iniciar as filas de processamento para o envio de e-mails é necessário iniciá-las com o comando `php artisan queue:work`.
 
+Como o banco de dados foi enviado para o arquivo do git, rodando o `composer install` já deve ser o sufiente para utilizar a aplicação. **Observação** é interessante rodar o comando `php artisan migrate:refresh` para que as migrations sejam aplicadas e o banco resetado.
+
+Mas caso seja interessante utilizar outro banco de dados é necessário alterar em `.env` os dados de banco de dados e rodar o comando `php artisan migrate`.
+
 ## Login e Autenticação
 
 Para acessar um usuário é necessário primeiramente registrá-lo, para isso é utilizado o endpoint `POST` `http://127.0.0.1:8000/api/register` e nele inserir o JSON com o seguinte formato `{
@@ -40,4 +44,15 @@ Para obter o token de autenticação JWT é necessário acessar o endpoint `POST
 
 4. Para excluir uma despesa é utilizado o endpoint `DELETE` `http://127.0.0.1:8000/api/despesas/{id}`.
 
-5. Para atualizar uma despesa é utilizado o endpoint `PUT` ``http://127.0.0.1:8000/api/despesas/{id}`.
+5. Para atualizar uma despesa é utilizado o endpoint `PUT` `http://127.0.0.1:8000/api/despesas/{id}`.
+
+## Envio de emails
+
+Para realizar o envio de emails foi utilizado o mailtrap para que fosse realizado os testes, para isso foi utilizado as credenciais do mailtrap no .env `MAIL_MAILER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=ce47e455a44c9b
+MAIL_PASSWORD=dfbb498be083e8
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS="hello@example.com"
+MAIL_FROM_NAME="${APP_NAME}"` caso seja necessário é possível utilizar a ferramenta mailtrap para também realizar os testes, criando a conta e trocando o MAIL_USERNAME e o MAIL_PASSWORD.
