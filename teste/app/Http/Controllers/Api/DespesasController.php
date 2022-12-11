@@ -22,15 +22,14 @@ class DespesasController extends Controller
     }
     public function index(Request $request)
     {
-        $despesas = Despesa::query();
-        return $despesas->where('user_id', Auth::id())->paginate();
+        return response()->json($this->despesasRepository->getPage(Auth::id(), array()));
     }
     public function store(DespesasFormRequest $request)
     {
         # code...
         $request->user_id = Auth::id();
 
-        $despesaCriadaEvent = new \App\Events\DespesaCriada(
+        $despesaCriadaEvent = new EventsDespesaCriada(
             $request->data,
             $request->valor,
             $request->descricao,
@@ -41,35 +40,35 @@ class DespesasController extends Controller
 
         return response()->json($this->despesasRepository->add($request), 201);
     }
-    public function show(int $despesas)
+    public function show(int $despesa)
     {
-        # code...
-        $despesasModel = Despesa::find($despesas);
-
-        $this->authorize('view', $despesasModel);
-
-        return $despesasModel;
+        $this->verifyDespesaPolicyItem($despesa, 'view');
+        
+        return response()->json($this->despesasRepository->getItem($despesa), 200);
     }
     public function update(Despesa $despesa, Request $request)
     {
-        # code...
-        $despesaModel = Despesa::find($despesa);
+        $this->verifyDespesaPolicyItem($despesa->id, 'update');
 
-        $this->authorize('update', $despesaModel);
-
-        $despesa->fill($request->all());
-        $despesa->save();
-
-        return $despesa;
+        return response()->json($this->despesasRepository->update($despesa, $request), 200);
     }
     public function destroy(int $despesa)
     {
-        # code...
-        $despesaModel = Despesa::find($despesa);
+        $this->verifyDespesaPolicyItem($despesa, 'delete');
 
-        $this->authorize('delete', $despesaModel);
-
-        Despesa::destroy($despesa);
+        $this->despesasRepository->delete($despesa);
         return response()->noContent();
+    }
+
+    /**
+     * Verifica a Policy escolhida de acordo com o item
+     * @param int $itemId
+     * @param string $policy - nome da policy desejada
+     * @return void
+     */
+    private function verifyDespesaPolicyItem(int $itemId, string $policy)
+    {
+        $despesasModel = Despesa::find($itemId);
+        $this->authorize($policy , $despesasModel);
     }
 }
