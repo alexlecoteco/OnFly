@@ -38,7 +38,7 @@ Para obter o token de autenticação JWT é necessário acessar o endpoint `POST
     "descricao": "Carro Novo"
 }`, o id do usuário já é armazenado de acordo com o token utilizado. Ao criar uma despesa é realizado o envio de um e-mail para o usuário logado.
 
-2. Para obter as despesas é utilizado o endpoint `GET` `http://127.0.0.1:8000/api/despesas`, o retorno em JSON mostra as despesas do usuário.
+2. Para obter as despesas é utilizado o endpoint `GET` `http://127.0.0.1:8000/api/despesas`, o retorno em JSON mostra as despesas do usuário. **OBS** foi utilizado o método `paginate()` para a busca de dados, então são mostrados alguns valores pertinentes a busca de outras páginas ou de informações nesse GET.
 
 3. Para obter uma única despesa é utilizado o endpoint `GET` `http://127.0.0.1:8000/api/despesas/{id}`, o retorno em JSON mostra as despesas do usuário.
 
